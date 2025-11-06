@@ -368,5 +368,4 @@ def get_partition_keys():
 def get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True):
     # THIS DATA IS PROVIDED BY DEWEY AND IS NOT PUBLICLY AVAILABLE
     df = pandas.DataFrame(columns=useful_columns)
-
     return df
