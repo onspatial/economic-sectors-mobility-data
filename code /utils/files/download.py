@@ -1,9 +1,9 @@
-
 import utils.files.check as check_utils
 import utils.files.path as path_utils
 import utils.files.bash as bash_utils
 
-def get_downloaded_file_path(file_name, url='', output_dir="data/downloaded",time_out=2, verbose=False):
+
+def get_downloaded_file_path(file_name, url="", output_dir="data/downloaded", time_out=2, verbose=False):
     file_path = f"{output_dir}/{file_name}"
     file_path = path_utils.get_absolute_path(file_path)
     if verbose:
@@ -12,16 +12,15 @@ def get_downloaded_file_path(file_name, url='', output_dir="data/downloaded",tim
         if verbose:
             print(f"File {file_path} already exists")
         return file_path
-    if url != '':
+    if url != "":
         print(f"Downloading {file_name} from {url}")
         check_utils.is_safe(file_path, new=False, is_dir=False)
         download_command = f"wget -O {file_path} {url} && wait"
         bash_utils.run_command(download_command)
-        check_utils.wait_until_file_exists(file_path, time_out=time_out,command_to_run=download_command, verbose=verbose)
+        check_utils.wait_until_file_exists(file_path, time_out=time_out, command_to_run=download_command, verbose=verbose)
         return file_path
     else:
         return None
-
 
 
 def download_all_files(file_list_df, download_storage=None, verbose=False):
