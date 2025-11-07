@@ -6,6 +6,7 @@ import utils.dewey as dewey_utils
 import utils.data_structure.list as list_utils
 import utils.data_structure.dict as dict_utils
 import utils.data_structure.dataframe as dataframe_utils
+import utils.division as division_utils
 import pandas
 import os
 import sys
@@ -66,13 +67,17 @@ def get_aggregated_df(input_df, column="raw_visit_counts", group_by_column="naic
 
 if __name__ == "__main__":
     section = 0
+    division = "ga"
     if len(sys.argv) > 1:
         section = int(sys.argv[1])
         max_section = int(sys.argv[2])
+        division = sys.argv[3]
 
     dataset_class = "weekly"
-    data_path = "data/p2"
+    data_path = f"data/p2/{division}"
+
     metric_names = ["mean", "q2", "count", "sum"]
+
     for metric_name in metric_names:
         refresh_intermediate_file = False
         visit_csv_path = f"{data_path}/{dataset_class}/visits_{metric_name}.csv"
@@ -83,7 +88,7 @@ if __name__ == "__main__":
         process_time_start = time.time()
         partition_keys = dewey_utils.get_partition_keys()
 
-        useful_columns = ["placekey", "parent_placekey", "naics_code", "raw_visit_counts", "raw_visitor_counts", "distance_from_home", "median_dwell"]
+        useful_columns = ["placekey", "parent_placekey", "poi_cbg", "naics_code", "raw_visit_counts", "raw_visitor_counts", "distance_from_home", "median_dwell"]
         visits_df = pandas.DataFrame()
         visitors_df = pandas.DataFrame()
         distance_df = pandas.DataFrame()
@@ -108,6 +113,8 @@ if __name__ == "__main__":
                     print(f"Getting visitor for {partition_key}")
                     if len(input_df) == 0:
                         input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True)
+                        if division != "us":
+                            input_df = division_utils.get_filtered_df(input_df, division)
                     if len(grouped_input_df) == 0:
                         grouped_input_df = get_naics_grouped_input_df(input_df, verbose=True)
 
