@@ -1,0 +1,12 @@
+python code/data.py 0 0 us
+python code/data.py 0 0 d1
+python code/data.py 0 0 d2
+python code/data.py 0 0 d3
+python code/data.py 0 0 d4
+python code/data.py 0 0 d5
+python code/data.py 0 0 d6
+python code/data.py 0 0 d7
+python code/data.py 0 0 d8
+python code/data.py 0 0 d9
+python code/data.py 0 0 GA_FULTON
+python code/data.py 0 0 GA_DEKALB

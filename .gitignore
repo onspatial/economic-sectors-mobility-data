@@ -2,3 +2,5 @@ code/dewey/
 data/*
 temp.csv
 logs/*
+data.*/*
+bash-output.txt

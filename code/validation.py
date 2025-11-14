@@ -91,7 +91,7 @@ if __name__ == "__main__":
         partition_keys = list_utils.get_section(partition_keys, section, max_section)
     if weeks != 0:
         partition_keys = partition_keys[:weeks]
-    useful_columns = ["placekey", "poi_cbg", "longitude", "latitude", "naics_code", "distance_from_home", "median_dwell", "raw_visit_counts", "raw_visitor_counts"]
+    useful_columns = ["poi_cbg", "longitude", "latitude", "naics_code", "distance_from_home", "median_dwell", "raw_visit_counts", "raw_visitor_counts"]
     output_df = pandas.DataFrame()
     output_list = []
     bbx_df = pandas.read_csv("data/park/code_fullnames_bbx_manual.csv")

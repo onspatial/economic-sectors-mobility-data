@@ -221,5 +221,5 @@ def get_partition_keys():
 def get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True):
     # THIS DATA IS PROVIDED BY DEWEY AND IS NOT PUBLICLY AVAILABLE
 
-    df = dewey_dataframe.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True)
+    df = dewey_dataframe.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=verbose)
     return df

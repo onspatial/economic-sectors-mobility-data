@@ -54,7 +54,20 @@ def get_state_fips_dict():
     }
     return state_fips
 
+def get_county_fips_dict():
+    county_fips = {
+        "GA_FULTON": "13121",
+        "GA_DEKALB": "13089",
+        # Add more county FIPS codes as needed
+    }
+    return county_fips
+
 
 def get_state_fips_code(state_abbr):
     state_fips = get_state_fips_dict()
     return state_fips.get(state_abbr.upper(), None)
+
+def get_county_fips_code(county_fips):
+    county_fips_dict = get_county_fips_dict()
+    return county_fips_dict.get(county_fips.upper(), None)
+

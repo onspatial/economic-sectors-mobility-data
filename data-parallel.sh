@@ -1,9 +1,19 @@
 #!/bin/bash
-python code/data.py 1 4 us &
-python code/data.py 2 4 us &
-python code/data.py 3 4 us &
+# python code/data.py 1 4 us &
+# python code/data.py 2 4 us &
+# python code/data.py 3 4 us &
+# wait
+# python code/data.py 0 0 us
+python code/data.py 1 4 GA_FULTON &
+python code/data.py 2 4 GA_FULTON &
+python code/data.py 3 4 GA_FULTON &
 wait
-python code/data.py 0 0 us
+python code/data.py 0 0 GA_FULTON
+python code/data.py 1 4 GA_DEKALB &
+python code/data.py 2 4 GA_DEKALB &
+python code/data.py 3 4 GA_DEKALB &
+wait
+python code/data.py 0 0 GA_DEKALB
 python code/data.py 1 4 d1 &
 python code/data.py 2 4 d1 &
 python code/data.py 3 4 d1 &
@@ -99,3 +109,5 @@ python code/data.py 2 4 fl &
 python code/data.py 3 4 fl &
 wait
 python code/data.py 0 0 fl
+
+

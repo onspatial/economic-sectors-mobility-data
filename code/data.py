@@ -15,17 +15,19 @@ pandas.set_option("future.no_silent_downcasting", True)
 import time
 
 
-def get_naics_grouped_input_df(input_df, lenghts=[2, 4, 6], verbose=True):
+def get_naics_grouped_input_df(input_df, lenghts=[2, 4, 6], verbose=False):
     naics_grouped_list = []
     for length in lenghts:
         niacs_df = get_trim_niacs_code(input_df, length=length, verbose=verbose)
         print(f"length:{length} len(niacs_df[naics_code].unique()): {len(niacs_df['naics_code'].unique())}")
         naics_grouped_list.append(niacs_df)
     naics_grouped_df = pandas.concat(naics_grouped_list)
+    naics_grouped_df = naics_grouped_df.dropna(subset=["naics_code"])
+    naics_grouped_df["naics_code"] = naics_grouped_df["naics_code"].astype(str)
     return naics_grouped_df
 
 
-def get_trim_niacs_code(input_df, length=2, verbose=True):
+def get_trim_niacs_code(input_df, length=2, verbose=False):
     df = input_df.copy()
     df["naics_code"] = df["naics_code"].astype(str)
     df["naics_code"] = df["naics_code"].apply(lambda x: x[:length] if len(x) >= length else None)
@@ -42,7 +44,7 @@ def get_trim_niacs_code(input_df, length=2, verbose=True):
     return df
 
 
-def get_aggregated_df(input_df, column="raw_visit_counts", group_by_column="naics_code", verbose=True):
+def get_aggregated_df(input_df, column="raw_visit_counts", group_by_column="naics_code", verbose=False):
     if verbose:
         print(f"Aggregating {column} by {group_by_column}")
         print(input_df.head())
@@ -62,19 +64,22 @@ def get_aggregated_df(input_df, column="raw_visit_counts", group_by_column="naic
         )
         .reset_index()
     )
+    if 'naics_code' in aggregated_df.columns:
+        aggregated_df = aggregated_df.dropna(subset=["naics_code"])
+        aggregated_df['naics_code'] = aggregated_df['naics_code'].astype(str)
     return aggregated_df
 
 
 if __name__ == "__main__":
     section = 0
-    division = "ga"
+    division = "us"
     if len(sys.argv) > 1:
         section = int(sys.argv[1])
         max_section = int(sys.argv[2])
         division = sys.argv[3]
 
     dataset_class = "weekly"
-    data_path = f"data/p2/{division}"
+    data_path = f"data/intermediate/{division}"
 
     metric_names = ["mean", "q2", "count", "sum"]
 
@@ -88,7 +93,7 @@ if __name__ == "__main__":
         process_time_start = time.time()
         partition_keys = dewey_utils.get_partition_keys()
 
-        useful_columns = ["placekey", "parent_placekey", "poi_cbg", "naics_code", "raw_visit_counts", "raw_visitor_counts", "distance_from_home", "median_dwell"]
+        useful_columns = ["poi_cbg", "naics_code", "raw_visit_counts", "raw_visitor_counts", "distance_from_home", "median_dwell"]
         visits_df = pandas.DataFrame()
         visitors_df = pandas.DataFrame()
         distance_df = pandas.DataFrame()
@@ -112,11 +117,11 @@ if __name__ == "__main__":
                     print(f"File {visitor_csv_path_statistics} not available")
                     print(f"Getting visitor for {partition_key}")
                     if len(input_df) == 0:
-                        input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True)
+                        input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path)
                         if division != "us":
                             input_df = division_utils.get_filtered_df(input_df, division)
                     if len(grouped_input_df) == 0:
-                        grouped_input_df = get_naics_grouped_input_df(input_df, verbose=True)
+                        grouped_input_df = get_naics_grouped_input_df(input_df)
 
                     partition_aggregated_visitors_df = get_aggregated_df(grouped_input_df, "raw_visitor_counts", "naics_code")
                     partition_aggregated_visitors_df.to_csv(visitor_csv_path_statistics, index=False)
@@ -126,7 +131,7 @@ if __name__ == "__main__":
                     visitors_df = pandas.merge(visitors_df, partition_visitors_df, on="naics_code", how="outer") if not visitors_df.empty else partition_visitors_df
                 else:
                     print(f"Already exists {visitor_csv_path_statistics}")
-                    partition_aggregated_visitors_df = pandas.read_csv(visitor_csv_path_statistics)
+                    partition_aggregated_visitors_df = pandas.read_csv(visitor_csv_path_statistics, dtype={"naics_code": str})
                     partition_visitors_df = partition_aggregated_visitors_df[["naics_code", metric_name]]
                     partition_visitors_df.to_csv(visitor_csv_intermediate_file_path, index=False)
                     partition_visitors_df.columns = ["naics_code", f"{partition_key}"]
@@ -143,7 +148,7 @@ if __name__ == "__main__":
                     print(f"File {distance_csv_path_statistics} not available")
                     print(f"Getting distance for {partition_key}")
                     if len(input_df) == 0:
-                        input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True)
+                        input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path)
                     if len(grouped_input_df) == 0:
                         grouped_input_df = get_naics_grouped_input_df(input_df)
 
@@ -156,7 +161,7 @@ if __name__ == "__main__":
                     distance_df.to_csv(distance_csv_path, index=False)
                 else:
                     print(f"Already exists {distance_csv_path_statistics}")
-                    partition_aggregated_distance_df = pandas.read_csv(distance_csv_path_statistics)
+                    partition_aggregated_distance_df = pandas.read_csv(distance_csv_path_statistics, dtype={"naics_code": str})
                     partition_distance_df = partition_aggregated_distance_df[["naics_code", metric_name]]
                     partition_distance_df.to_csv(distance_csv_intermediate_file_path, index=False)
                     partition_distance_df.columns = ["naics_code", f"{partition_key}"]
@@ -174,7 +179,7 @@ if __name__ == "__main__":
                     print(f"File {dwell_csv_path_statistics} not available")
                     print(f"Getting dwell for {partition_key}")
                     if len(input_df) == 0:
-                        input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path, verbose=True)
+                        input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path)
                     if len(grouped_input_df) == 0:
                         grouped_input_df = get_naics_grouped_input_df(input_df)
 
@@ -188,7 +193,7 @@ if __name__ == "__main__":
 
                 else:
                     print(f"Already exists {dwell_csv_path_statistics}")
-                    partition_aggregated_dwell_df = pandas.read_csv(dwell_csv_path_statistics)
+                    partition_aggregated_dwell_df = pandas.read_csv(dwell_csv_path_statistics, dtype={"naics_code": str})
                     partition_dwell_df = partition_aggregated_dwell_df[["naics_code", metric_name]]
                     partition_dwell_df.to_csv(dwell_csv_intermediate_file_path, index=False)
                     partition_dwell_df.columns = ["naics_code", f"{partition_key}"]

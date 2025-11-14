@@ -2,27 +2,25 @@ import os
 import utils.files.basics as file_basics
 
 
-def get_data_storage_path(folder_name="orphans", root_path_mode="home"):
+def get_data_storage_path(folder_name="orphans", root_path_mode='home'):
     root_path = get_home_path()
-    if root_path_mode == "home":
+    if root_path_mode == 'home':
         root_path = get_home_path()
-    elif root_path_mode == "external":
-        root_path = get_hard_drive_path()
-    storage_path = join_path(root_path, "Storage", folder_name)
+    else:
+        root_path = get_hard_drive_path(which=root_path_mode)
+    storage_path = join_path(root_path, 'Storage', folder_name)
     return storage_path
-
 
 def get_home_path():
     return os.path.expanduser("~")
 
-
-def get_hard_drive_path(which="hdd_5tb"):
-    hdd_5tb = "/run/media/amiri/amirih/"
-    hdd_10tb = "/run/media/amiri/10TB/"
-    if which == "hdd_5tb":
+def get_hard_drive_path(which='external_hdd_5tb'):
+    hdd_5tb = '/run/media/amiri/amirih/'
+    ssd_2tb = '/run/media/amiri/fedora/home/amiri/'
+    if which == 'external_hdd_5tb':
         return hdd_5tb
-    elif which == "hdd_10tb":
-        return hdd_10tb
+    elif which == 'external_ssd_2tb':
+        return ssd_2tb
     else:
         return hdd_5tb
 
