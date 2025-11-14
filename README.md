@@ -84,3 +84,128 @@ This dataset is licensed under the terms detailed in the [LICENSE](LICENSE) file
 ---
 
 For further information, questions, or contributions, please use the repository's issue tracker or contact the maintainer directly.
+
+## Results for Smaller Regions
+
+Results for smaller regions can be generated using the code in the `code/` directory. Follow the steps below:
+
+1. Set the `division` variable in `data.py` to the desired region (for example, `custom_region1`).
+2. Add an `elif` block for the custom region:
+   ```python
+   elif which == "custom_region1":
+       division_codes = ("130", "131", "132")  # Example FIPS codes for custom region 1
+   ```
+3. Use `data-parallel.sh` or `data-serial.sh` to generate the data for the custom region.
+4. Run `dataset.ipynb` to generate the dataset, plots, correlations, and summary statistics for the selected region.
+
+Below we show example plots for Census Divisions 1 through 9.
+
+### Census Fulton County GA
+
+**Distance Mean Over Time for Fulton County GA**  
+![Census Fulton County GA: distance mean](results/GA_FULTON/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Fulton County GA**  
+![Census Fulton County GA: visitors mean](results/d5/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Fulton County GA**  
+![Census Fulton County GA: dwell mean](results/GA_FULTON/figs/line-dwell-mean.png)
+
+### Census Division 1
+
+**Distance Mean Over Time for Division 1**  
+![Census Division 1: distance mean](results/d1/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 1**  
+![Census Division 1: visitors mean](results/d1/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 1**  
+![Census Division 1: dwell mean](results/d1/figs/line-dwell-mean.png)
+
+### Census Division 2
+
+**Distance Mean Over Time for Division 2**  
+![Census Division 2: distance mean](results/d2/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 2**  
+![Census Division 2: visitors mean](results/d2/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 2**  
+![Census Division 2: dwell mean](results/d2/figs/line-dwell-mean.png)
+
+### Census Division 3
+
+**Distance Mean Over Time for Division 3**  
+![Census Division 3: distance mean](results/d3/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 3**  
+![Census Division 3: visitors mean](results/d3/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 3**  
+![Census Division 3: dwell mean](results/d3/figs/line-dwell-mean.png)
+
+### Census Division 4
+
+**Distance Mean Over Time for Division 4**  
+![Census Division 4: distance mean](results/d4/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 4**  
+![Census Division 4: visitors mean](results/d4/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 4**  
+![Census Division 4: dwell mean](results/d4/figs/line-dwell-mean.png)
+
+### Census Division 5
+
+**Distance Mean Over Time for Division 5**  
+![Census Division 5: distance mean](results/d5/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 5**  
+![Census Division 5: visitors mean](results/d5/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 5**  
+![Census Division 5: dwell mean](results/d5/figs/line-dwell-mean.png)
+
+### Census Division 6
+
+**Distance Mean Over Time for Division 6**  
+![Census Division 6: distance mean](results/d6/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 6**  
+![Census Division 6: visitors mean](results/d6/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 6**  
+![Census Division 6: dwell mean](results/d6/figs/line-dwell-mean.png)
+
+### Census Division 7
+
+**Distance Mean Over Time for Division 7**  
+![Census Division 7: distance mean](results/d7/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 7**  
+![Census Division 7: visitors mean](results/d7/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 7**  
+![Census Division 7: dwell mean](results/d7/figs/line-dwell-mean.png)
+
+### Census Division 8
+
+**Distance Mean Over Time for Division 8**  
+![Census Division 8: distance mean](results/d8/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 8**  
+![Census Division 8: visitors mean](results/d8/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 8**  
+![Census Division 8: dwell mean](results/d8/figs/line-dwell-mean.png)
+
+### Census Division 9
+
+**Distance Mean Over Time for Division 9**  
+![Census Division 9: distance mean](results/d9/figs/line-distance-mean.png)
+
+**Visitors Mean Over Time for Division 9**  
+![Census Division 9: visitors mean](results/d9/figs/line-visitors-mean.png)
+
+**Dwell Time Mean Over Time for Division 9**  
+![Census Division 9: dwell mean](results/d9/figs/line-dwell-mean.png)
