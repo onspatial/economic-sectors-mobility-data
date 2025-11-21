@@ -120,6 +120,8 @@ if __name__ == "__main__":
                         input_df = dewey_utils.get_partition_key_df(partition_key, useful_columns, dataset_class, data_path)
                         if division != "us":
                             input_df = division_utils.get_filtered_df(input_df, division)
+                        if division != "poi":
+                            input_df = division_utils.get_filtered_df(input_df, division, poi_names=['Starbucks'], exact_match=False)
                     if len(grouped_input_df) == 0:
                         grouped_input_df = get_naics_grouped_input_df(input_df)
 

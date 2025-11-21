@@ -1,3 +1,4 @@
+import re
 import utils.string.fips as fips_utils
 
 
@@ -41,7 +42,25 @@ def get_division_codes(which="us"):
     return division_codes
 
 
-def get_filtered_df(input_df, division):
+def get_filtered_df(input_df, division, poi_names=None, exact_match=False):
+    """Filters input_df for rows matching division codes or POI names.
+    Args:
+        input_df (pd.DataFrame): Input dataframe with 'poi_cbg' and 'location_name' columns.
+        division (str): Division code or state code to filter by.
+        poi_names (list, optional): List of POI names to filter by. Defaults to None.
+        exact_match (bool, optional): Whether to use exact match for POI names. Defaults to False.
+    Returns:
+        pd.DataFrame: Filtered dataframe.
+    """
+    if poi_names is not None:
+        print(f"Filtering len={len(input_df)} input_df for POI names: {poi_names}")
+        if not exact_match:
+            pattern = "|".join(map(re.escape, poi_names))
+            mask = input_df["location_name"].str.contains(pattern, case=False, na=False)
+        else:
+            mask = input_df["location_name"].isin(poi_names)
+        input_df = input_df.loc[mask]
+        return input_df
     print(f"Filtering len={len(input_df)} input_df for state codes: {division}")
     division_codes = get_division_codes(which=division)
     mask = input_df["poi_cbg"].astype("string").str.startswith(division_codes)
